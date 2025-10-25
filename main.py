@@ -56,3 +56,12 @@ class Snake:
         self.screen.onkeypress(self.snake_direction_down , "s")
         self.screen.onkeypress(self.snake_direction_left , "a")
         self.screen.onkeypress(self.snake_direction_right , "d")
+
+    def border_collision(self):
+        """If Snake collides, modifies the end_game value to "True" to end the game."""
+        if self.snake.xcor() < -390 or self.snake.xcor() > 390 or self.snake.ycor() < -390 or self.snake.ycor() > 390:
+            time.sleep(self.delay)
+            self.snake.goto(0,0)
+            self.sdata.clear(); self.sdata.goto(0, 50)
+            self.sdata.color("red"); self.sdata.write("YOU LOSE\nScore: 0\t\tRecord: 0", align="center", font=('Arial', 30, "bold"));
+            self.end_game = True
