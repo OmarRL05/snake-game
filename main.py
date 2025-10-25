@@ -32,16 +32,25 @@ class Snake:
 
     #Snake angles direction functions
     def snake_direction_up (self):
+        """Sets the snake's heading to Up (90 degrees) if not moving Down."""
         if self.snake.heading() != 270: self.snake.setheading(90)
     def snake_direction_down (self):
+        """Sets the snake's heading to Down (270 degrees) if not moving Up"""
         if self.snake.heading() != 90: self.snake.setheading(270)
     def snake_direction_left (self):
+        """Sets the snake's heading to Left (180 degrees) if not moving Right."""
         if self.snake.heading() != 0: self.snake.setheading(180)
     def snake_direction_right (self):
+        """Sets the snake's heading to Right (0 degrees) if not moving Left."""
         if self.snake.heading() != 180: self.snake.setheading(0)
 
     #Snake movement function
     def snake_move(self):
+        """Activates keyboard listeners and binds keys to movement functions.
+
+            Sets up the game to listen for key presses and maps the WASD Keys to the corresponding snake
+            direction methods.
+        """
         self.screen.listen() #Listener activation
         self.screen.onkeypress(self.snake_direction_up, "w")
         self.screen.onkeypress(self.snake_direction_down , "s")
