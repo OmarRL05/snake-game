@@ -29,3 +29,21 @@ class Snake:
         self.snake.shape("square"); self.snake.penup()
         self.apples.shape("circle"); self.apples.penup(); self.apples.speed(0)
         self.screen.tracer(0)
+
+    #Snake angles direction functions
+    def snake_direction_up (self):
+        if self.snake.heading() != 270: self.snake.setheading(90)
+    def snake_direction_down (self):
+        if self.snake.heading() != 90: self.snake.setheading(270)
+    def snake_direction_left (self):
+        if self.snake.heading() != 0: self.snake.setheading(180)
+    def snake_direction_right (self):
+        if self.snake.heading() != 180: self.snake.setheading(0)
+
+    #Snake movement function
+    def snake_move(self):
+        self.screen.listen() #Listener activation
+        self.screen.onkeypress(self.snake_direction_up, "w")
+        self.screen.onkeypress(self.snake_direction_down , "s")
+        self.screen.onkeypress(self.snake_direction_left , "a")
+        self.screen.onkeypress(self.snake_direction_right , "d")
