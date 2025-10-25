@@ -65,3 +65,12 @@ class Snake:
             self.sdata.clear(); self.sdata.goto(0, 50)
             self.sdata.color("red"); self.sdata.write("YOU LOSE\nScore: 0\t\tRecord: 0", align="center", font=('Arial', 30, "bold"));
             self.end_game = True
+
+    def start_snake(self):
+        """Starts user's gameplay and updates screen information """
+        while not self.end_game:
+            self.snake.forward(20)
+            self.border_collision()
+            self.screen.update()
+            time.sleep(self.delay)
+        self.screen.mainloop()
