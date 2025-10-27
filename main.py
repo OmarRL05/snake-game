@@ -84,6 +84,17 @@ class Snake:
         snake_chest.goto(410, 410)
         self.snake_body.append(snake_chest)
 
+    def snake_collision(self):
+        """Checks for collision between the snake's head and its own body
+
+            Iterates through each segment of the snake's body (excluding the
+            segment right behind the head) and sets the `end_game` flag to True
+            if the head gets too close to any part of its body.
+        """
+        for chest in self.snake_body[1:]:
+            if self.snake.distance(chest) < 10:
+                self.end_game = True
+
     def border_collision(self):
         """If Snake collides, modifies the end_game value to "True" to end the game."""
         if self.snake.xcor() < -390 or self.snake.xcor() > 390 or self.snake.ycor() < -390 or self.snake.ycor() > 390:
