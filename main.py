@@ -90,10 +90,11 @@ class Snake:
             time.sleep(self.delay)
             self.snake.goto(0,0)
             self.sdata.clear(); self.sdata.goto(0, 50)
-            self.sdata.color("red");
+            self.sdata.color("red")
             self.sdata.write(f"YOU LOSE\nScore: {self.apple_points}\tSize: {self.snake_size}", align="center", font=('Arial', 30, "bold"))
             for chest in self.snake_body:
                 chest.hideturtle()
+            self.snake_body.clear()
             self.end_game = True
 
     def apple_collision(self):
@@ -115,6 +116,7 @@ class Snake:
 
     def start_snake(self):
         """Starts user's gameplay and updates screen information """
+        self.snake_move()
         while not self.end_game:
             self.snake_body_move()
             self.snake.forward(20)
@@ -122,4 +124,11 @@ class Snake:
             self.apple_collision()
             self.screen.update()
             time.sleep(self.delay)
+
+        self.apple_points, self.snake_size = 0, 0
+        self.end_game = False
+
         self.screen.mainloop()
+
+Snake_game = Snake()
+Snake_game.start_snake()
