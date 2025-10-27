@@ -19,14 +19,15 @@ class Snake:
     """
     def __init__(self):
         """Initializes all the core components required to start a game session."""
-        self.screen = turtle.Screen()
+        self.screen = turtle.Screen(); self.screen.listen() #Listener activation
         self.snake = turtle.Turtle()
         self.sdata = turtle.Turtle()
         self.lose = turtle.Turtle()
         self.apple = turtle.Turtle()
         self.delay = 0.1
-        self.end_game = False
         self.apple_points, self.snake_size = 0, 0
+        self.end_game = False
+        self.press_x = False
         self.snake_body = []
 
         self.screen.setup(width=800, height=800); self.screen.title("Snake Game"); self.screen.bgcolor("#329F5B")
@@ -59,7 +60,6 @@ class Snake:
             Sets up the game to listen for key presses and maps the WASD Keys to the corresponding snake
             direction methods.
         """
-        self.screen.listen() #Listener activation
         self.screen.onkeypress(self.snake_direction_up, "w")
         self.screen.onkeypress(self.snake_direction_down , "s")
         self.screen.onkeypress(self.snake_direction_left , "a")
@@ -126,12 +126,16 @@ class Snake:
         for chest in self.snake_body:
             chest.hideturtle()
         self.snake_body.clear()
+        self.apple_points, self.snake_size = 0, 0
         self.end_game = True
+        self.screen.update()
 
     def start_snake(self):
         """Starts user's gameplay and updates screen information """
+        time.sleep(1)
         self.snake_move()
         self.lose.clear()
+        self.screen.update() #Clear screen before start playing
         while not self.end_game:
             self.snake_body_move()
             self.snake.forward(20)
@@ -139,11 +143,33 @@ class Snake:
             self.apple_collision()
             self.screen.update()
             time.sleep(self.delay)
-
-        self.apple_points, self.snake_size = 0, 0
         self.end_game = False
 
+    def menu_keys(self):
+        self.screen.onkeypress(self.start_snake, "space")
+
+    def on_game(self):
+
+        """Main function
+
+            Allows to restart once a game ends. Restarts the snake size, respawns the apple again and cleans the
+            full snake's body.
+        """
+        #Welcome screen
+        welcome_text = turtle.Turtle()
+        welcome_text.hideturtle()
+        welcome_text.penup()
+        welcome_text.sety(-50)
+        welcome_text.color("white")
+        welcome_text.write("Press 'space' to start", align="center", font=('Arial', 25, "normal"))
+        self.screen.update()
+        time.sleep(3)
+        welcome_text.clear()
+        self.screen.update()
+        #Reading `Space` to play again
+        self.menu_keys()
+        #Screen updates ending
         self.screen.mainloop()
 
 Snake_game = Snake()
-Snake_game.start_snake()
+Snake_game.on_game()
