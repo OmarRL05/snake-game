@@ -22,6 +22,7 @@ class Snake:
         self.screen = turtle.Screen()
         self.snake = turtle.Turtle()
         self.sdata = turtle.Turtle()
+        self.lose = turtle.Turtle()
         self.apple = turtle.Turtle()
         self.delay = 0.1
         self.end_game = False
@@ -31,6 +32,7 @@ class Snake:
         self.screen.setup(width=800, height=800); self.screen.title("Snake Game"); self.screen.bgcolor("#329F5B")
         self.sdata.penup(); self.sdata.speed(0); self.sdata.goto(0, 330); self.sdata.hideturtle()
         self.sdata.color("white"); self.sdata.write(f"Score: {self.apple_points} \tSize: {self.snake_size}", align="center", font=('Arial', 30, "bold"))
+        self.lose.hideturtle(); self.lose.penup(); self.lose.color("red"); self.lose.speed(0); self.lose.goto(0, 20)
         self.snake.shape("square"); self.snake.penup()
         self.apple.shape("circle"); self.apple.penup(); self.apple.speed(0); self.apple.color("red")
         self.apple.goto(random.randint(-390, 390), random.randint(-390, 390))
@@ -93,20 +95,12 @@ class Snake:
         """
         for chest in self.snake_body[1:]:
             if self.snake.distance(chest) < 10:
-                self.end_game = True
+                self.lose_screen()
 
     def border_collision(self):
         """If Snake collides, modifies the end_game value to "True" to end the game."""
         if self.snake.xcor() < -390 or self.snake.xcor() > 390 or self.snake.ycor() < -390 or self.snake.ycor() > 390:
-            time.sleep(self.delay)
-            self.snake.goto(0,0)
-            self.sdata.clear(); self.sdata.goto(0, 50)
-            self.sdata.color("red")
-            self.sdata.write(f"YOU LOSE\nScore: {self.apple_points}\tSize: {self.snake_size}", align="center", font=('Arial', 30, "bold"))
-            for chest in self.snake_body:
-                chest.hideturtle()
-            self.snake_body.clear()
-            self.end_game = True
+            self.lose_screen()
 
     def apple_collision(self):
         """Checks for collision with the apple and updates the game state.
@@ -125,9 +119,19 @@ class Snake:
             self.sdata.clear()
             self.sdata.write(f"Score: {self.apple_points} \tSize: {self.snake_size}", align="center", font=('Arial', 30, "bold"))
 
+    def lose_screen(self):
+        time.sleep(self.delay)
+        self.snake.goto(0, 0)
+        self.lose.write("\tYou Lose\n Press Space to Play again", align="center", font=('Arial', 40, "bold"))
+        for chest in self.snake_body:
+            chest.hideturtle()
+        self.snake_body.clear()
+        self.end_game = True
+
     def start_snake(self):
         """Starts user's gameplay and updates screen information """
         self.snake_move()
+        self.lose.clear()
         while not self.end_game:
             self.snake_body_move()
             self.snake.forward(20)
