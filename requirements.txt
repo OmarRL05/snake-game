@@ -1,0 +1,3 @@
+# This project only uses standard Python modules such as Turtle, Time, Random.
+# It is not required to download external dependences.
+PythonTurtle==0.3.2
