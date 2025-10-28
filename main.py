@@ -19,25 +19,53 @@ class Snake:
     """
     def __init__(self):
         """Initializes all the core components required to start a game session."""
-        self.screen = turtle.Screen(); self.screen.listen() #Listener activation
+        #Screen & Turtles initialization
+        self.screen = turtle.Screen()
+        self.screen.listen() #Listener activation
         self.snake = turtle.Turtle()
         self.sdata = turtle.Turtle()
         self.lose = turtle.Turtle()
         self.apple = turtle.Turtle()
+
+        # Variable Sources initialization
         self.delay = 0.1
         self.apple_points, self.snake_size = 0, 0
         self.end_game = False
         self.press_x = False
-        self.snake_body = []
+        self.snake_body = [] #Snake's body list
 
-        self.screen.setup(width=800, height=800); self.screen.title("Snake Game"); self.screen.bgcolor("#329F5B")
-        self.sdata.penup(); self.sdata.speed(0); self.sdata.goto(0, 330); self.sdata.hideturtle()
-        self.sdata.color("white"); self.sdata.write(f"Score: {self.apple_points} \tSize: {self.snake_size}", align="center", font=('Arial', 30, "bold"))
-        self.lose.hideturtle(); self.lose.penup(); self.lose.color("red"); self.lose.speed(0); self.lose.goto(0, 20)
-        self.snake.shape("square"); self.snake.penup()
-        self.apple.shape("circle"); self.apple.penup(); self.apple.speed(0); self.apple.color("red")
+        # Screen configuration
+        self.screen.setup(width=800, height=800)
+        self.screen.title("Snake Game")
+        self.screen.bgcolor("#329F5B")
+
+        # Starter score configuration
+        self.sdata.penup()
+        self.sdata.speed(0)
+        self.sdata.goto(0, 330)
+        self.sdata.hideturtle()
+        self.sdata.color("white")
+        self.sdata.write(f"Score: {self.apple_points} \tSize: {self.snake_size}", align="center", font=('Arial', 30, "bold"))
+
+        # Lose text-box configuration
+        self.lose.hideturtle()
+        self.lose.penup()
+        self.lose.color("red")
+        self.lose.speed(0)
+        self.lose.goto(0, 20)
+
+        # Snake head configuration
+        self.snake.shape("square")
+        self.snake.penup()
+
+        # Food configuration
+        self.apple.shape("circle")
+        self.apple.penup()
+        self.apple.speed(0)
+        self.apple.color("red")
         self.apple.goto(random.randint(-390, 390), random.randint(-390, 390))
-        self.screen.tracer(0)
+
+        self.screen.tracer(0) #Screen Tracer deactivated
 
     #Snake angles direction functions
     def snake_direction_up (self):
@@ -53,7 +81,7 @@ class Snake:
         """Sets the snake's heading to Right (0 degrees) if not moving Left."""
         if self.snake.heading() != 180: self.snake.setheading(0)
 
-    #Snake movement function
+    #Snake's movement functions
     def snake_move(self):
         """Activates keyboard listeners and binds keys to movement functions.
 
@@ -86,6 +114,7 @@ class Snake:
         snake_chest.goto(410, 410)
         self.snake_body.append(snake_chest)
 
+    # Collisions
     def snake_collision(self):
         """Checks for collision between the snake's head and its own body
 
@@ -118,6 +147,7 @@ class Snake:
             self.apple.goto(random.randint(-390, 390), random.randint(-390, 390))
             self.score_screen()
 
+    # Screen updates
     def score_screen(self):
         self.sdata.clear()
         self.sdata.write(f"Score: {self.apple_points} \tSize: {self.snake_size}", align="center", font=('Arial', 30, "bold"))
@@ -128,7 +158,9 @@ class Snake:
         self.end_game = True
         self.screen.update()
 
+    # Game options
     def _restart(self):
+        """Cleans all screen & cache from last game"""
         self.snake.goto(0, 0)
         for chest in self.snake_body:
             chest.hideturtle()
@@ -157,7 +189,6 @@ class Snake:
         self.screen.onkeypress(self._restart, "space")
 
     def on_game(self):
-
         """Main function
 
             Allows to restart once a game ends. Restarts the snake size, respawns the apple again and cleans the
@@ -169,7 +200,7 @@ class Snake:
         welcome_text.penup()
         welcome_text.sety(-50)
         welcome_text.color("white")
-        welcome_text.write("Press 'space' to start", align="center", font=('Arial', 25, "normal"))
+        welcome_text.write("Press 'space' to start before text disappear", align="center", font=('Arial', 25, "normal"))
         self.screen.update()
         time.sleep(3)
         welcome_text.clear()
