@@ -116,19 +116,27 @@ class Snake:
             self.apple_points += 10
             self.snake_size += 1
             self.apple.goto(random.randint(-390, 390), random.randint(-390, 390))
-            self.sdata.clear()
-            self.sdata.write(f"Score: {self.apple_points} \tSize: {self.snake_size}", align="center", font=('Arial', 30, "bold"))
+            self.score_screen()
+
+    def score_screen(self):
+        self.sdata.clear()
+        self.sdata.write(f"Score: {self.apple_points} \tSize: {self.snake_size}", align="center", font=('Arial', 30, "bold"))
 
     def lose_screen(self):
         time.sleep(self.delay)
-        self.snake.goto(0, 0)
         self.lose.write("\tYou Lose\n Press Space to Play again", align="center", font=('Arial', 40, "bold"))
+        self.end_game = True
+        self.screen.update()
+
+    def _restart(self):
+        self.snake.goto(0, 0)
         for chest in self.snake_body:
             chest.hideturtle()
         self.snake_body.clear()
         self.apple_points, self.snake_size = 0, 0
-        self.end_game = True
-        self.screen.update()
+        self.score_screen()
+        self.apple.goto(random.randint(-390, 390), random.randint(-390, 390))
+        self.start_snake()
 
     def start_snake(self):
         """Starts user's gameplay and updates screen information """
@@ -146,7 +154,7 @@ class Snake:
         self.end_game = False
 
     def menu_keys(self):
-        self.screen.onkeypress(self.start_snake, "space")
+        self.screen.onkeypress(self._restart, "space")
 
     def on_game(self):
 
